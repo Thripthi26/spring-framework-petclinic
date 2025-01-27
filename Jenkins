@@ -1,0 +1,21 @@
+node	{
+    def app
+
+  
+    stage('Clone repository') {
+        checkout scm
+    }
+
+        stage("Package jar file with Maven"){
+            dir('Thripthi26/spring-framework-petclinic'){
+                sh "mvn clean package -DskipTests"
+            }
+        }
+	
+    stage('Build image with Docker') {
+        dir('Thripthi26/spring-framework-petclinic') {
+            app = docker.build("framework:${env.BUILD_NUMBER}")
+	    sh "docker ps"
+        }
+    }
+ }
